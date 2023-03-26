@@ -1,0 +1,214 @@
+body {
+  background-color: #000;
+  color: #ffffff;
+}
+
+.text-color-headding {
+  color: #ededed;
+}
+
+.text-color-subheadding {
+  color: #bbbbbb;
+}
+::selection {
+  background-color: #4b0082;
+  color: #fff;
+}
+.link-without-underline {
+  text-decoration: none;
+}
+
+/* Input */
+.auth-input {
+  background-color: #222222;
+  border-color: #000000;
+  color: #ffffff;
+}
+.auth-input:focus {
+  background-color: #222222;
+  border-color: #000000;
+  color: #ffffff;
+}
+.auth-input::placeholder {
+  color: #a3a3a3;
+}
+input.no-focus-outline:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+textarea.no-focus-outline:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+textarea.form-control {
+  max-height: 100px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.password-container {
+  position: relative;
+}
+.password-container input[type="password"],
+.password-container input[type="text"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+.fa-eye {
+  position: absolute;
+  top: 5%;
+  right: 4%;
+  cursor: pointer;
+  color: lightgray;
+}
+
+.ct-quiz-input,
+.ct-quiz-input:disabled {
+  background-color: #818488;
+  border-color: #818488;
+  color: #ffffff;
+  cursor: pointer;
+}
+.ct-quiz-input:focus {
+  background-color: #818488;
+  border-color: #818488;
+  color: #ffffff;
+}
+.ct-quiz-input::placeholder {
+  color: #dedede;
+}
+
+/* Button */
+.auth-btn {
+  background-color: #483d8b;
+  color: #ffffff;
+}
+.auth-btn:hover {
+  background-color: #564aa8;
+  color: #eeeaea;
+  border-color: #483d8b;
+}
+.auth-btn:active {
+  background-color: #564aa8;
+  color: #eeeaea;
+  border-color: #483d8b;
+}
+
+.cust-danger-btn {
+  background-color: #d72740;
+  color: #ffffff;
+}
+.cust-danger-btn:hover {
+  background-color: #e32642;
+  color: #eeeaea;
+  border-color: #d72740;
+}
+.cust-danger-btn:active {
+  background-color: #d72740;
+  color: #eeeaea;
+  border-color: #d72740;
+}
+
+.cust-sec-btn {
+  background-color: #818488;
+  color: #ffffff;
+}
+.cust-sec-btn:hover {
+  background-color: #979da4;
+  color: #eeeaea;
+  border-color: #818488;
+}
+.cust-sec-btn:active {
+  background-color: #818488;
+  color: #eeeaea;
+  border-color: #818488;
+}
+
+.form-check-input[type="checkbox"]:checked,
+.form-check-input[type="radio"]:checked,
+.form-check-input[type="checkbox"]:disabled,
+.form-check-input[type="radio"]:disabled {
+  background-color: #483d8b;
+  border-color: #483d8b;
+}
+
+.form-check-input[type="checkbox"]:hover,
+.form-check-input[type="radio"]:hover {
+  cursor: pointer;
+}
+
+.form-check-input[type="checkbox"] {
+  height: 20px;
+  width: 20px;
+  border-radius: 25%;
+}
+
+.form-control option {
+  background-color: #818488 !important;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+select.no-focus-outline:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+select {
+  cursor: pointer;
+}
+
+.custom-dropdown:hover,
+.custom-dropdown:active,
+.custom-dropdown:focus,
+.custom-dropdown,
+.custom-dropdown:disabled {
+  background-color: #818488;
+  color: #ffffff;
+  border-color: #818488;
+}
+
+.cust-quiz-btn {
+  background-color: #483d8b;
+  color: #ffffff;
+}
+.cust-quiz-btn:hover {
+  background-color: #8a2be2;
+  color: #eeeaea;
+  border-color: #8a2be2;
+}
+.cust-quiz-btn-active,
+.cust-quiz-btn-active:hover {
+  background-color: #ff8c00;
+  color: #eeeaea;
+  border-color: #ff8c00;
+}
+
+.cust-profile-btn,
+.cust-profile-btn:active {
+  background-color: #ff8c00;
+  color: #eeeaea;
+  border-color: #ff8c00;
+}
+.cust-profile-btn:hover {
+  background-color: #ff910a;
+  color: #eeeaea;
+  border-color: #ff910a;
+}

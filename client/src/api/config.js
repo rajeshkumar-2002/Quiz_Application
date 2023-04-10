@@ -3,7 +3,7 @@
 // };
 
 const config = {
-  apiUrl: "http://localhost:5000",
+  apiUrl: "https://quiz-app-7u8e.onrender.com/",
 };
 
 export default config;

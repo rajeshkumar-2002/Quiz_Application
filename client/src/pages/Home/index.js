@@ -28,7 +28,7 @@ function Home() {
       image:
         "https://t3.ftcdn.net/jpg/03/30/86/14/360_F_330861430_Sy9xGjDh43Hr7lakI3goYATg3fkOaXyt.jpg",
       name: "Create Form",
-      link: "/createquiz",
+      link: "/playground",
     },
     {
       image:

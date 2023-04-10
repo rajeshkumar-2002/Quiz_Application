@@ -12,12 +12,12 @@ function Takequiz() {
 
   return (
     <div className="container">
-      <div className="d-flex justify-content-center mt-5">
-        <div className="mt-5 card border-0 bg-transparent col-xxl-5 col-xl-6 col-lg-7 col-md-9 col-12">
+      <div className="d-flex justify-content-center align-items-center" style={{height:"50vh"}}>
+        <div className="mcard border-0 bg-transparent col-xxl-5 col-xl-6 col-lg-7 col-md-9 col-12">
           <div className="card-body">
-            <h1 className="fs-1 text-color-headding">Take quiz</h1>
+            <h1 className="fs-1 text-color-headding text-center">Take quiz</h1>
             <form onSubmit={handlesubmit}>
-              <div className="form-group pt-4">
+              <div className="form-group pt-2">
                 <label htmlFor="quizid" className="fs-6 text-color-subheadding">
                   Quiz id
                 </label>

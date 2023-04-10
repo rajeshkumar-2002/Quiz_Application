@@ -83,8 +83,8 @@ function Signup() {
     <>
       <div className="container">
         <ToastContainer />
-        <div className="d-flex justify-content-center mt-5">
-          <div className="mt-5 card border-0 bg-transparent col-xxl-5 col-xl-6 col-lg-7 col-md-9 col-12">
+        <div className="d-flex justify-content-center">
+          <div className="mt-3 card border-0 bg-transparent col-xxl-5 col-xl-6 col-lg-7 col-md-9 col-12">
             <div className="card-body">
               <h1 className="fs-1 text-color-headding">Get started</h1>
               <h2 className="fs-6 text-color-subheadding">

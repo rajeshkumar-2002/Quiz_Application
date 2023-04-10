@@ -1,0 +1,7 @@
+MAIL_SERVER='sandbox.smtp.mailtrap.io'
+MAIL_PORT = 2525
+MAIL_USERNAME = '76193144e8efdc'
+MAIL_PASSWORD = '500c2ee2b060e8'
+MAIL_USE_TLS = True
+MAIL_USE_SSL = False
+MAIL_DEFAULT_SENDER = 'silverfox2k21@gmail.com'

@@ -1,13 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import config from "../../api/config";
 import { getlocalstorage } from "../../localstorage";
 // toast
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loader from "../../components/molecule/Loader";
+import { ProfileContext } from "../../route/Homeroute";
 
 function Profile() {
   const email = getlocalstorage("user").user_email;
+  const { profile, setProfile } = useContext(ProfileContext);
   const [user, setUser] = useState();
   const [edit, setEdit] = useState(false);
   const [changepassword, setchangePassword] = useState(false);
@@ -18,6 +21,7 @@ function Profile() {
   const [pic, setpic] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword_new, setshowPassword_new] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleShowPassword_new = () => {
     setshowPassword_new(!showPassword_new);
@@ -41,15 +45,18 @@ function Profile() {
         axios
           .get(config.apiUrl + "/get_profile_image")
           .then((fil_response) => {
-            console.log(fil_response.data.data.Images);
+            // console.log(fil_response.data.data.Images);
             setpic(fil_response.data.data.Images);
+            setLoading(false);
           })
           .catch((error) => {
             console.log(error);
+            setLoading(false);
           });
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   }, [edit, changepassword]);
 
@@ -81,6 +88,7 @@ function Profile() {
       .then((response) => {
         console.log(response.data);
         successtost("Update successfully");
+        setProfile(profile + 1);
         setEdit(!edit);
       })
       .catch((error) => {
@@ -149,270 +157,277 @@ function Profile() {
   return (
     <div className="container">
       <ToastContainer />
-      <h1 className="mt-5 text-center">Profile</h1>
-      <div className="d-flex justify-content-center mt-5">
-        <div
-          className=" card border-0 col-xxl-5 col-xl-6 col-lg-7 col-md-9 col-12"
-          style={{ backgroundColor: "#3E3E3E", borderRadius: "16px" }}
-        >
-          {pic && (
-            <div className="card-body p-4">
-              {user && !edit && !changepassword && (
-                <div>
-                  <div className="d-flex justify-content-center">
-                    <img
-                      src={user.profile_pic}
-                      className="rounded-circle shadow-4"
-                      style={{ width: "100px" }}
-                      alt="Avatar"
-                    />
+      <h1 className="text-center">Profile</h1>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="d-flex justify-content-center mt-3">
+          <div
+            className=" card border-0 col-xxl-5 col-xl-6 col-lg-7 col-md-9 col-12"
+            style={{ backgroundColor: "#3E3E3E", borderRadius: "16px" }}
+          >
+            {pic && (
+              <div className="card-body p-4">
+                {user && !edit && !changepassword && (
+                  <div>
+                    <div className="d-flex justify-content-center">
+                      <img
+                        src={user.profile_pic}
+                        className="rounded-circle shadow-4"
+                        style={{ width: "100px" }}
+                        alt="Avatar"
+                      />
+                    </div>
+                    <div className="mt-4">
+                      <p className="fs-6">
+                        User_id : {user.email.split("@")[0]}
+                      </p>
+                      <p className="fs-6">Name : {user.name}</p>
+                      <p className="fs-6">Email : {user.email}</p>
+                      <p className="fs-6">Phone : {user.phone}</p>
+                    </div>
+                    <div className="d-flex justify-content-between">
+                      <button
+                        className="btn auth-btn"
+                        onClick={() => {
+                          setEdit(!edit);
+                        }}
+                      >
+                        Edit Profile
+                      </button>
+                      <button
+                        className="btn cust-profile-btn"
+                        onClick={() => {
+                          setchangePassword(!changepassword);
+                        }}
+                      >
+                        Change Password
+                      </button>
+                    </div>
                   </div>
-                  <div className="mt-4">
-                    <p className="fs-6">Name : {user.name}</p>
-                    <p className="fs-6">Email : {user.email}</p>
-                    <p className="fs-6">Phone : {user.phone}</p>
-                  </div>
-                  <div className="d-flex justify-content-between">
-                    <button
-                      className="btn auth-btn"
-                      onClick={() => {
-                        setEdit(!edit);
-                      }}
+                )}
+                {user && edit && (
+                  <div>
+                    <div
+                      className="modal fade"
+                      id="exampleModal"
+                      tabIndex="-1"
+                      aria-labelledby="exampleModalLabel"
+                      aria-hidden="true"
                     >
-                      Edit Profile
-                    </button>
-                    <button
-                      className="btn cust-profile-btn"
-                      onClick={() => {
-                        setchangePassword(!changepassword);
-                      }}
-                    >
-                      Change Password
-                    </button>
-                  </div>
-                </div>
-              )}
-              {user && edit && (
-                <div>
-                  <div
-                    className="modal fade"
-                    id="exampleModal"
-                    tabIndex="-1"
-                    aria-labelledby="exampleModalLabel"
-                    aria-hidden="true"
-                  >
-                    <div className="modal-dialog">
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <h1
-                            className="modal-title fs-5"
-                            id="exampleModalLabel"
-                          ></h1>
-                          <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                          ></button>
-                        </div>
-                        <div className="modal-body d-flex justify-content-between">
-                          {Object.entries(pic).map(([key, url]) => (
-                            <div
-                              key={key}
-                              onClick={() => {
-                                handleImagechange(url);
-                              }}
+                      <div className="modal-dialog">
+                        <div className="modal-content">
+                          <div className="modal-header">
+                            <h1
+                              className="modal-title fs-5"
+                              id="exampleModalLabel"
+                            ></h1>
+                            <button
+                              type="button"
+                              className="btn-close"
                               data-bs-dismiss="modal"
-                            >
-                              <img
-                                className="shadow-4"
-                                style={{
-                                  width: "100px",
-                                  cursor: "pointer",
-                                  borderRadius: "16px",
+                              aria-label="Close"
+                            ></button>
+                          </div>
+                          <div className="modal-body d-flex flex-wrap justify-content-around">
+                            {Object.entries(pic).map(([key, url]) => (
+                              <div
+                                key={key}
+                                onClick={() => {
+                                  handleImagechange(url);
                                 }}
-                                src={url}
-                                alt={key}
-                              />
-                            </div>
-                          ))}
+                                data-bs-dismiss="modal"
+                              >
+                                <img
+                                  className="shadow-4"
+                                  style={{
+                                    width: "100px",
+                                    cursor: "pointer",
+                                    borderRadius: "16px",
+                                  }}
+                                  src={url}
+                                  alt={key}
+                                />
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="d-flex justify-content-center">
-                    <img
-                      src={user.profile_pic}
-                      className="rounded-circle shadow-4"
-                      style={{ width: "100px", cursor: "pointer" }}
-                      alt="Avatar"
-                      data-bs-toggle="modal"
-                      data-bs-target="#exampleModal"
-                    />
-                  </div>
+                    <div className="d-flex justify-content-center">
+                      <img
+                        src={user.profile_pic}
+                        className="rounded-circle shadow-4"
+                        style={{ width: "100px", cursor: "pointer" }}
+                        alt="Avatar"
+                        data-bs-toggle="modal"
+                        data-bs-target="#exampleModal"
+                      />
+                    </div>
 
-                  <form onSubmit={handlesubmit}>
-                    <div>
-                      <div className="form-group pt-4">
-                        <label htmlFor="email" className="fs-6">
-                          Email
-                        </label>
-                        <input
-                          id="email"
-                          className="form-control ct-quiz-input"
-                          placeholder="Enter Your email"
-                          type="text"
-                          value={user.email}
-                          disabled={true}
-                          required
-                        />
-                      </div>
-                      <div className="form-group pt-4">
-                        <label htmlFor="name" className="fs-6">
-                          Name
-                        </label>
-                        <input
-                          id="name"
-                          className="form-control ct-quiz-input"
-                          placeholder="Enter Your name"
-                          type="text"
-                          value={user.name}
-                          onChange={handleNameChange}
-                          name="name"
-                          required
-                        />
-                      </div>
-                      <div className="form-group pt-4">
-                        <label htmlFor="Phone" className="fs-6">
-                          Phone
-                        </label>
-                        <input
-                          id="Phone"
-                          className="form-control ct-quiz-input"
-                          type="text"
-                          onKeyPress={handleKeyPress}
-                          placeholder="Enter your phone number"
-                          value={user.phone}
-                          onChange={handlePhoneChange}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="d-flex justify-content-between mt-4">
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => {
-                          setEdit(false);
-                        }}
-                      >
-                        Back
-                      </button>
-                      <input
-                        className="btn btn-success"
-                        type="submit"
-                        name="Save"
-                        value="Save"
-                      />
-                    </div>
-                  </form>
-                </div>
-              )}
-              {changepassword && (
-                <div>
-                  <h2>Change Password</h2>
-                  <form onSubmit={handleChangePassword}>
-                    <div>
-                      <div className="form-group pt-4">
-                        <label
-                          htmlFor="old_password"
-                          className="fs-6 text-color-subheadding"
-                        >
-                          Old Password
-                        </label>
-                        <div className="password-container">
+                    <form onSubmit={handlesubmit}>
+                      <div>
+                        <div className="form-group pt-4">
+                          <label htmlFor="email" className="fs-6">
+                            Email
+                          </label>
                           <input
-                            id="old_password"
-                            className="form-control auth-input"
-                            type={showPassword ? "text" : "password"}
-                            value={password.old_password}
-                            onChange={(e) => {
-                              setPassword({
-                                ...password,
-                                old_password: e.target.value,
-                              });
-                            }}
+                            id="email"
+                            className="form-control ct-quiz-input"
+                            placeholder="Enter Your email"
+                            type="text"
+                            value={user.email}
+                            disabled={true}
                             required
                           />
-                          <div
-                            className="fa-eye"
-                            type="button"
-                            onClick={handleShowPassword}
+                        </div>
+                        <div className="form-group pt-4">
+                          <label htmlFor="name" className="fs-6">
+                            Name
+                          </label>
+                          <input
+                            id="name"
+                            className="form-control ct-quiz-input"
+                            placeholder="Enter Your name"
+                            type="text"
+                            value={user.name}
+                            onChange={handleNameChange}
+                            name="name"
+                            required
+                          />
+                        </div>
+                        <div className="form-group pt-4">
+                          <label htmlFor="Phone" className="fs-6">
+                            Phone
+                          </label>
+                          <input
+                            id="Phone"
+                            className="form-control ct-quiz-input"
+                            type="text"
+                            onKeyPress={handleKeyPress}
+                            placeholder="Enter your phone number"
+                            value={user.phone}
+                            onChange={handlePhoneChange}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="d-flex justify-content-between mt-4">
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => {
+                            setEdit(false);
+                          }}
+                        >
+                          Back
+                        </button>
+                        <input
+                          className="btn btn-success"
+                          type="submit"
+                          name="Save"
+                          value="Save"
+                        />
+                      </div>
+                    </form>
+                  </div>
+                )}
+                {changepassword && (
+                  <div>
+                    <h2>Change Password</h2>
+                    <form onSubmit={handleChangePassword}>
+                      <div>
+                        <div className="form-group pt-4">
+                          <label
+                            htmlFor="old_password"
+                            className="fs-6 text-color-subheadding"
                           >
-                            {showPassword ? (
-                              <i className="bi bi-eye-slash fs-5"></i>
-                            ) : (
-                              <i className="bi bi-eye fs-5"></i>
-                            )}
+                            Old Password
+                          </label>
+                          <div className="password-container">
+                            <input
+                              id="old_password"
+                              className="form-control auth-input"
+                              type={showPassword ? "text" : "password"}
+                              value={password.old_password}
+                              onChange={(e) => {
+                                setPassword({
+                                  ...password,
+                                  old_password: e.target.value,
+                                });
+                              }}
+                              required
+                            />
+                            <div
+                              className="fa-eye"
+                              type="button"
+                              onClick={handleShowPassword}
+                            >
+                              {showPassword ? (
+                                <i className="bi bi-eye-slash fs-5"></i>
+                              ) : (
+                                <i className="bi bi-eye fs-5"></i>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="form-group pt-4">
+                          <label
+                            htmlFor="new_password"
+                            className="fs-6 text-color-subheadding"
+                          >
+                            New Password
+                          </label>
+                          <div className="password-container">
+                            <input
+                              id="new_password"
+                              className="form-control auth-input"
+                              type={showPassword_new ? "text" : "password"}
+                              value={password.new_password}
+                              onChange={(e) => {
+                                setPassword({
+                                  ...password,
+                                  new_password: e.target.value,
+                                });
+                              }}
+                              required
+                            />
+                            <div
+                              className="fa-eye"
+                              type="button"
+                              onClick={handleShowPassword_new}
+                            >
+                              {showPassword_new ? (
+                                <i className="bi bi-eye-slash fs-5"></i>
+                              ) : (
+                                <i className="bi bi-eye fs-5"></i>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div className="form-group pt-4">
-                        <label
-                          htmlFor="new_password"
-                          className="fs-6 text-color-subheadding"
+                      <div className="d-flex justify-content-between mt-4">
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => {
+                            setchangePassword(false);
+                          }}
                         >
-                          New Password
-                        </label>
-                        <div className="password-container">
-                          <input
-                            id="new_password"
-                            className="form-control auth-input"
-                            type={showPassword_new ? "text" : "password"}
-                            value={password.new_password}
-                            onChange={(e) => {
-                              setPassword({
-                                ...password,
-                                new_password: e.target.value,
-                              });
-                            }}
-                            required
-                          />
-                          <div
-                            className="fa-eye"
-                            type="button"
-                            onClick={handleShowPassword_new}
-                          >
-                            {showPassword_new ? (
-                              <i className="bi bi-eye-slash fs-5"></i>
-                            ) : (
-                              <i className="bi bi-eye fs-5"></i>
-                            )}
-                          </div>
-                        </div>
+                          Back
+                        </button>
+                        <input
+                          className="btn btn-success"
+                          type="submit"
+                          value="Change"
+                        />
                       </div>
-                    </div>
-                    <div className="d-flex justify-content-between mt-4">
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => {
-                          setchangePassword(false);
-                        }}
-                      >
-                        Back
-                      </button>
-                      <input
-                        className="btn btn-success"
-                        type="submit"
-                        value="Change"
-                      />
-                    </div>
-                  </form>
-                </div>
-              )}
-            </div>
-          )}
+                    </form>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

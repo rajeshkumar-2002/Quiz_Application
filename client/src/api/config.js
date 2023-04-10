@@ -1,5 +1,9 @@
+// const config = {
+//   apiUrl: "https://quiz-app-7u8e.onrender.com/",
+// };
+
 const config = {
-  apiUrl: "http://127.0.0.1:5000",
+  apiUrl: "http://localhost:5000",
 };
 
 export default config;

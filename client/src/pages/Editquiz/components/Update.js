@@ -9,6 +9,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Update_Quiz() {
   const { quiz_id } = useParams();
+  const [isCopied, setIsCopied] = useState(false);
+  const url = `${encodeURIComponent(
+    "Use the following link to access the quiz." +
+      window.location.href.replace("editquiz", "quiz")
+  )}`;
   const [data, setData] = useState();
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
@@ -22,7 +27,7 @@ function Update_Quiz() {
     axios
       .get(config.apiUrl + "/quiz/" + quiz_id)
       .then((response) => {
-        console.log(response.data.Quiz);
+        // console.log(response.data.Quiz);
         setData(response.data.Quiz);
         setQuestions(response.data.Quiz.Questions);
         setQuiz({
@@ -59,6 +64,11 @@ function Update_Quiz() {
         ],
       },
     ]);
+  };
+
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(Quiz._id);
+    setIsCopied(true);
   };
 
   const handleRemoveQuestion = (questionIndex) => {
@@ -209,10 +219,8 @@ function Update_Quiz() {
         axios
           .put(config.apiUrl + "/updatequiz/" + quiz_id, final)
           .then((response) => {
-            setMessage(
-              "Quiz added Successfully the quiz id id :" + response.data.quiz_id
-            );
-            successtost("Quiz update successfully");
+            setMessage("Quiz Updated Successfully");
+            successtost("Quiz updated successfully");
             setDisable(!disable);
             console.log("success");
           })
@@ -222,10 +230,10 @@ function Update_Quiz() {
             errortost("Error While updating the Quiz");
           });
       } else {
-        alert("Please add Question");
+        errortost("Please add Question");
       }
     } else {
-      alert("You missed to select the option for a Question");
+      errortost("You missed to select the option for a Question");
     }
   };
 
@@ -284,7 +292,7 @@ function Update_Quiz() {
       <h1 className="fs-2 text-center text-color-headding">Update Quiz</h1>
       <div className="d-flex justify-content-end">
         <button
-          className="btn auth-btn"
+          className="btn auth-btn my-3"
           onClick={() => {
             navigate("/report/" + quiz_id);
           }}
@@ -301,9 +309,24 @@ function Update_Quiz() {
             >
               <div className="card-body">
                 <div>
-                  <div className="fs-6 text-color-subheadding">
-                    <span style={{ color: "#ffffff" }}>Quiz id :</span>{" "}
-                    <span style={{ color: "#d2d2d2" }}>{Quiz._id}</span>
+                  <div className="fs-6 text-color-subheadding d-flex justify-content-between">
+                    <div>
+                      <span style={{ color: "#ffffff" }}>Quiz id :</span>{" "}
+                      <span style={{ color: "#d2d2d2" }}>{Quiz._id}</span>
+                      <span
+                        onClick={handleCopyClick}
+                        style={{ cursor: "pointer", color: "#ffffff" }}
+                        className={`bi ${
+                          isCopied ? "bi-clipboard-check" : "bi-clipboard"
+                        } ps-2`}
+                      ></span>
+                    </div>
+                    <a target="_blank" href={`https://wa.me/?text=${url}`}>
+                      <span
+                        style={{ cursor: "pointer", color: "#ffffff" }}
+                        className="bi bi-share-fill justify-content-end"
+                      ></span>
+                    </a>
                   </div>
                   <div>
                     <div className="form-group pt-4">

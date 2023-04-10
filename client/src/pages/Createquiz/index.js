@@ -4,10 +4,14 @@ import axios from "axios";
 import config from "../../api/config";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
+  const [isCopied, setIsCopied] = useState(false);
   const [message, setMessage] = useState("");
+  const [submited, setSubmited] = useState(false);
   const [questions, setQuestions] = useState([
     {
       question: "",
@@ -38,6 +42,11 @@ const CreateQuiz = () => {
       "-" +
       uuidv4().split("-")[0],
   });
+
+  const handleCopyClick = () => {
+    navigator.clipboard.writeText(Quiz._id);
+    setIsCopied(true);
+  };
 
   const handleAddQuestion = () => {
     setQuestions([
@@ -210,19 +219,23 @@ const CreateQuiz = () => {
         axios
           .post(config.apiUrl + "/addquiz", final)
           .then((response) => {
+            successtost(
+              "Quiz added Successfully the quiz id id :" + response.data.quiz_id
+            );
             setMessage(
               "Quiz added Successfully the quiz id id :" + response.data.quiz_id
             );
-            navigate("/");
+            setSubmited(true);
           })
           .catch((error) => {
+            errortost("Error While adding the Quiz");
             setMessage("Error While adding the Quiz");
           });
       } else {
-        alert("Please add Question");
+        errortost("Please add Question");
       }
     } else {
-      alert("You missed to select the option for a Question");
+      errortost("You missed to select the option for a Question");
     }
   };
 
@@ -236,9 +249,36 @@ const CreateQuiz = () => {
     }
   };
 
+  const errortost = (tost_message) => {
+    toast.error(tost_message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
+  const successtost = (tost_message) => {
+    toast.success(tost_message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  };
+
   return (
     <div className="container">
-      <h1 className="fs-2 text-center text-color-headding">Create Quiz</h1>
+      <ToastContainer />
+      <h1 className="fs-2 text-center text-color-headding pb-3">Create Quiz</h1>
       <form onSubmit={handleSubmit}>
         <div className="d-flex justify-content-center pb-5">
           <div
@@ -247,9 +287,18 @@ const CreateQuiz = () => {
           >
             <div className="card-body">
               <div>
-                <div className="fs-6 text-color-subheadding">
-                  <span style={{ color: "#ffffff" }}>Quiz id :</span>{" "}
-                  <span style={{ color: "#d2d2d2" }}>{Quiz._id}</span>
+                <div className="fs-6 text-color-subheadding d-flex justify-content-between">
+                  <div>
+                    <span style={{ color: "#ffffff" }}>Quiz id :</span>{" "}
+                    <span style={{ color: "#d2d2d2" }}>{Quiz._id}</span>
+                    <span
+                      onClick={handleCopyClick}
+                      style={{ cursor: "pointer", color: "#ffffff" }}
+                      className={`bi ${
+                        isCopied ? "bi-clipboard-check" : "bi-clipboard"
+                      } ps-2`}
+                    ></span>
+                  </div>
                 </div>
                 <div>
                   <div className="form-group pt-4">
@@ -592,9 +641,11 @@ const CreateQuiz = () => {
                     </button>
                   </div>
                   <div>
-                    <button className="btn btn-success" type="submit">
-                      Submit
-                    </button>
+                    {!submited && (
+                      <button className="btn btn-success" type="submit">
+                        Submit
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

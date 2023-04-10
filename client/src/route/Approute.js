@@ -3,6 +3,7 @@ import AuthRoute from "./Authroute";
 import HomeRoute from "./Homeroute";
 import { getlocalstorage } from "../localstorage";
 import { useSelector } from "react-redux";
+import Loader from "../components/molecule/Loader";
 
 function AppRoute() {
   const [isLoggedin, setisLoggedin] = useState(false);
@@ -34,7 +35,7 @@ function AppRoute() {
         )
       ) : (
         <>
-          <h1>Loading</h1>
+          <Loader />
         </>
       )}
     </>

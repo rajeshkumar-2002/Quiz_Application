@@ -3,6 +3,7 @@ import config from "../../../api/config";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Report.css";
+import Loader from "../../../components/molecule/Loader";
 
 function Report() {
   const [data, setData] = useState();
@@ -13,6 +14,7 @@ function Report() {
 
   const [scoreorder, setScoreorder] = useState(true);
   const [timeorder, setTimeorder] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -21,9 +23,11 @@ function Report() {
         let data = response.data.scores;
         const json = JSON.parse(data.replace(/'/g, '"'));
         setData(json);
+        setLoading(false);
       })
       .catch((error) => {
         console.log(error.response);
+        setLoading(false);
       });
   }, []);
 
@@ -77,87 +81,91 @@ function Report() {
 
   return (
     <div>
-      {data && (
-        <div className="container">
-          <h1 className="text-center bg-transparent text-wrap fs-1 fw-semibold mt-5 mb-3">
-            Report
-          </h1>
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control ct-quiz-input"
-              placeholder="Enter name or email id"
-              aria-label="Search"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button
-              className="btn btn-secondary"
-              type="button"
-              onClick={handleResetClick}
-            >
-              Reset
-            </button>
-          </div>
-          <div className="d-flex mb-3 flex-wrap ">
-            <table className="rwd-table">
-              <tbody>
-                <tr>
-                  <th>#</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>
-                    Score{" "}
-                    <span
-                      className="btn btn-link text-white"
-                      onClick={() => {
-                        handleSortClick("score");
-                        setScoreorder(!scoreorder);
-                      }}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <i
-                        className={
-                          scoreorder ? "bi bi-arrow-down" : "bi bi-arrow-up"
-                        }
-                      ></i>
-                    </span>
-                  </th>
-                  <th>Max Score</th>
-                  <th>
-                    Time [in sec]
-                    <span
-                      className="btn btn-link text-white"
-                      onClick={() => {
-                        handleSortClick("time");
-                        setTimeorder(!timeorder);
-                      }}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <i
-                        className={
-                          timeorder ? "bi bi-arrow-down" : "bi bi-arrow-up"
-                        }
-                      ></i>
-                    </span>
-                  </th>
-                  <th>Max Time [in sec]</th>
-                </tr>
-                {sortedData.map((data, index) => (
-                  <tr key={index}>
-                    <td data-th="#">{index + 1}</td>
-                    <td data-th="Name">{data.name}</td>
-                    <td data-th="Email">{data.user_email}</td>
-                    <td data-th="Score">{data.score}</td>
-                    <td data-th="Max Score">{data.max_score}</td>
-                    <td data-th="Time [in sec]">{data.time}</td>
-                    <td data-th="Max Time [in sec]">{data.max_time}</td>
+      {loading ? (
+        <Loader />
+      ) : (
+        data && (
+          <div className="container">
+            <h1 className="text-center bg-transparent text-wrap fs-1 fw-semibold mb-3">
+              Report
+            </h1>
+            <div className="input-group mb-5">
+              <input
+                type="text"
+                className="form-control ct-quiz-input"
+                placeholder="Enter name or email id"
+                aria-label="Search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button
+                className="btn btn-secondary"
+                type="button"
+                onClick={handleResetClick}
+              >
+                Reset
+              </button>
+            </div>
+            <div className="d-flex mb-3 flex-wrap ">
+              <table className="rwd-table">
+                <tbody>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>
+                      Score{" "}
+                      <span
+                        className="btn btn-link text-white"
+                        onClick={() => {
+                          handleSortClick("score");
+                          setScoreorder(!scoreorder);
+                        }}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i
+                          className={
+                            scoreorder ? "bi bi-arrow-down" : "bi bi-arrow-up"
+                          }
+                        ></i>
+                      </span>
+                    </th>
+                    <th>Max Score</th>
+                    <th>
+                      Time [in sec]
+                      <span
+                        className="btn btn-link text-white"
+                        onClick={() => {
+                          handleSortClick("time");
+                          setTimeorder(!timeorder);
+                        }}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <i
+                          className={
+                            timeorder ? "bi bi-arrow-down" : "bi bi-arrow-up"
+                          }
+                        ></i>
+                      </span>
+                    </th>
+                    <th>Max Time [in sec]</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                  {sortedData.map((data, index) => (
+                    <tr key={index}>
+                      <td data-th="#">{index + 1}</td>
+                      <td data-th="Name">{data.name}</td>
+                      <td data-th="Email">{data.user_email}</td>
+                      <td data-th="Score">{data.score}</td>
+                      <td data-th="Max Score">{data.max_score}</td>
+                      <td data-th="Time [in sec]">{data.time}</td>
+                      <td data-th="Max Time [in sec]">{data.max_time}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )
       )}
     </div>
   );
